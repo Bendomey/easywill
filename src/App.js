@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, Suspense } from "react";
+import Layout from "./component/layout";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Spinner } from "evergreen-ui";
+
+function loading() {
+  return (
+    <Fragment>
+      <div>
+        <Spinner />
+      </div>
+    </Fragment>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <BrowserRouter>
+        <Suspense fallback={loading()}>
+          <Switch>
+            <Route
+              name={"Dasboard"}
+              render={(props) => <Layout {...props} />}
+              path={"/"}
+            />
+          </Switch>
+        </Suspense>
+      </BrowserRouter>
+    </Fragment>
   );
 }
 
