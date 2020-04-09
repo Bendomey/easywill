@@ -2,16 +2,25 @@ import React, { Fragment, Suspense } from "react";
 import Layout from "./component/layout";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Spinner } from "evergreen-ui";
+import LoginComponent from "./pages/auth/login";
 
-function loading() {
+const loading = (props) => {
   return (
     <Fragment>
-      <div>
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Spinner />
       </div>
     </Fragment>
   );
-}
+};
 
 function App() {
   return (
@@ -19,6 +28,12 @@ function App() {
       <BrowserRouter>
         <Suspense fallback={loading()}>
           <Switch>
+            <Route
+              name={"Login"}
+              exact={true}
+              render={(props) => <LoginComponent {...props} />}
+              path={"/login"}
+            />
             <Route
               name={"Dasboard"}
               render={(props) => <Layout {...props} />}
