@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { IconButton } from "evergreen-ui";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const MemberComponent = (props) => {
   const [data, setData] = useState([null]);
@@ -9,19 +10,20 @@ const MemberComponent = (props) => {
     document.title = "Members | Easy Will Dashboard";
     setLoading(true);
     //fetch data
-    axios("https://us-central1-samansiwill.cloudfunctions.net/members")
-    // axios("http://localhost:5001/samansiwill/us-central1/members")
+    // axios("https://us-central1-samansiwill.cloudfunctions.net/members")
+    axios("http://localhost:5001/samansiwill/us-central1/members")
       .then((res) => res.data)
       .then((members) => {
         setLoading(false);
-        setData(Object.values(members.data));
-        console.log(Object.values(members.data));
+        setData(members.data);
+        console.log(members.data);
       })
       .catch((e) => {
         setLoading(false);
         console.log("Error", e);
       });
   }, []);
+
   return (
     <Fragment>
       <h1 className="text-2xl font-semibold text-gray-900">Members</h1>
@@ -34,7 +36,7 @@ const MemberComponent = (props) => {
         </div>
       )}
 
-      {!loading && data.length === 0 && (
+      {!loading && Object.values(data).length === 0 && (
         <div
           style={{ height: "50vh" }}
           className={"flex items-center justify-center"}
@@ -43,7 +45,7 @@ const MemberComponent = (props) => {
         </div>
       )}
 
-      {!loading && data.length > 0 && (
+      {!loading && Object.values(data).length > 0 && (
         <Fragment>
           <div className="flex flex-col">
             <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -69,7 +71,7 @@ const MemberComponent = (props) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white">
-                    {data.map((member, i) => {
+                    {Object.entries(data).map(([key, member], i) => {
                       return (
                         <Fragment key={i}>
                           <tr
@@ -89,11 +91,12 @@ const MemberComponent = (props) => {
                                 <div className="ml-4">
                                   <div className="text-sm leading-5 font-medium text-gray-900">
                                     {member?.personalinformation?.firstname ||
-                                      "N/A"} {member?.personalinformation?.othername ||
-                                  "N/A"}
+                                      "N/A"}{" "}
+                                    {member?.personalinformation?.othername ||
+                                      "N/A"}
                                   </div>
                                   <div className="text-sm leading-5 text-gray-500">
-                                      {member?.personalinformation?.phonenumber ||
+                                    {member?.personalinformation?.phonenumber ||
                                       "N/A"}
                                   </div>
                                 </div>
@@ -101,28 +104,35 @@ const MemberComponent = (props) => {
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                               <div className="text-sm leading-5 text-gray-900">
-                                  {member?.personalinformation?.idnumtype ||
+                                {member?.personalinformation?.idnumtype ||
                                   "N/A"}
                               </div>
                               <div className="text-sm leading-5 text-gray-500">
-                                  {member?.personalinformation?.idnum ||
-                                  "N/A"}
+                                {member?.personalinformation?.idnum || "N/A"}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                                {member?.personalinformation?.gender ||
-                                "N/A"}
+                              {member?.personalinformation?.gender || "N/A"}
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                                {member?.personalinformation?.addresscountry ||
+                              {member?.personalinformation?.addresscountry ||
                                 "N/A"}
                             </td>
                             <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                              <IconButton
-                                appearance="minimal"
-                                icon="eye-open"
-                                iconSize={18}
-                              />
+                              <Link
+                                to={{
+                                  pathname: `/members/${key}`,
+                                  state: {
+                                    member,
+                                  },
+                                }}
+                              >
+                                <IconButton
+                                  appearance="minimal"
+                                  icon="eye-open"
+                                  iconSize={18}
+                                />
+                              </Link>
                             </td>
                           </tr>
                         </Fragment>
