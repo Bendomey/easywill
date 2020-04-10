@@ -1,9 +1,27 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const OverviewDashboard = (props) => {
+  const [data, setData] = useState([null]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     document.title = "Overview | Easy Will Dashboard";
-  });
+    setLoading(true);
+    //fetch data
+    // axios("https://us-central1-samansiwill.cloudfunctions.net/members")
+    axios("http://localhost:5001/samansiwill/us-central1/members")
+      .then((res) => res.data)
+      .then((members) => {
+        setLoading(false);
+        setData(Object.values(members.data).length);
+      })
+      .catch((e) => {
+        setLoading(false);
+        console.log("Error", e);
+      });
+  }, []);
+
   return (
     <Fragment>
       <h1 className="text-2xl font-semibold text-gray-900">Overview</h1>
@@ -30,26 +48,11 @@ const OverviewDashboard = (props) => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate">
-                      Total Subscribers
+                      Members
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        71,897
-                      </div>
-                      <div className="ml-2 flex items-baseline text-sm leading-5 font-semibold text-green-600">
-                        <svg
-                          className="self-center flex-shrink-0 h-5 w-5 text-green-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span className="sr-only">Increased by</span>
-                        122
+                        {loading ? 'loading...' : data || 'N/A'}
                       </div>
                     </dd>
                   </dl>
@@ -58,12 +61,12 @@ const OverviewDashboard = (props) => {
             </div>
             <div className="bg-gray-50 px-4 py-4 sm:px-6">
               <div className="text-sm leading-5">
-                <a
-                  href="#"
+                <Link
+                  to="/members"
                   className="font-medium text-indigo-600 hover:text-indigo-500 transition ease-in-out duration-150"
                 >
                   View all
-                </a>
+                </Link>
               </div>
             </div>
           </div>

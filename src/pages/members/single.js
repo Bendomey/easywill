@@ -360,7 +360,7 @@ const SingleUser = (props) => {
         </div>
       )}
 
-      {data?.executor && (
+      {data && data.executor !== undefined && (
         <div className="bg-white shadow overflow-hidden  sm:rounded-lg mt-3">
           <div className="px-4 py-5 border-b border-gray-200 sm:px-6">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -480,56 +480,31 @@ const SingleUser = (props) => {
               Member assets
             </p>
           </div>
-          {Object.values(data.assets).map((asset, i) => {
-            return (
-              <Fragment key={i}>
-                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-                  <dl className="grid grid-cols-1 col-gap-4 row-gap-8 sm:grid-cols-2">
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm leading-5 font-medium text-gray-500">
-                        Precious Metal Form
-                      </dt>
-                      <dd className="mt-1 text-sm leading-5 text-gray-900">
-                        {asset?.preciousmetalform || "N/A"}
-                      </dd>
-                    </div>
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm leading-5 font-medium text-gray-500">
-                        Precious Metal Type
-                      </dt>
-                      <dd className="mt-1 text-sm leading-5 text-gray-900">
-                        {asset?.preciousmetaltype || "N/A"}
-                      </dd>
-                    </div>
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm leading-5 font-medium text-gray-500">
-                        Precious Metal Karadt
-                      </dt>
-                      <dd className="mt-1 text-sm leading-5 text-gray-900">
-                        {asset?.preciousmetalkarat || "N/A"}
-                      </dd>
-                    </div>
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm leading-5 font-medium text-gray-500">
-                        Precious Metal Location
-                      </dt>
-                      <dd className="mt-1 text-sm leading-5 text-gray-900">
-                        {asset?.preciousmetallocation || "N/A"}
-                      </dd>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm leading-5 font-medium text-gray-500">
-                        Precious Metal Information
-                      </dt>
-                      <dd className="mt-1 text-sm leading-5 text-gray-900">
-                        {asset?.preciousmetalinformation || "N/A"}
-                      </dd>
-                    </div>
-                  </dl>
+          {data?.assets &&
+            Object.entries(data.assets).map(([key, value], i) => {
+              return (
+                <div className={"border-b mt-5"}>
+                  {Object.entries(value).map(([keyAsset, keyValue], j) => {
+                    return (
+                      <Fragment key={j}>
+                        <div
+                          className={`${
+                            j % 2 == 0 ? "bg-gray-50" : "bg-white"
+                          } px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6`}
+                        >
+                          <dt className="text-sm leading-5 font-medium text-gray-500">
+                            {keyAsset}
+                          </dt>
+                          <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+                            {keyValue}
+                          </dd>
+                        </div>
+                      </Fragment>
+                    );
+                  })}
                 </div>
-              </Fragment>
-            );
-          })}
+              );
+            })}
         </div>
       )}
 
@@ -630,57 +605,60 @@ const SingleUser = (props) => {
                       </dd>
                     </div>
                   </dl>
-                  {data?.distribution && Object.keys(data?.distribution).map((keyDis, i) => {
-                    if (keyDis === key)
-                      return (
-                        <div className="sm:col-span-2 mt-2" key={i}>
-                          <dt className="text-sm leading-5 font-medium text-gray-500">
-                            Asset(s)
-                          </dt>
-                          <dd className="mt-1 text-sm leading-5 text-gray-900">
-                            <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
-                              {/*{console.log(Object.(data?.distribution[keyDis]).length)}*/}
-                              <ul>
-                                {Object.values(data?.distribution[keyDis]).map(
-                                  (distribute, i) => {
-                                    if(distribute instanceof Object) return (
-                                    <li key={i}>
-                                      <a
-                                        href="#"
-                                        className="block hover:bg-gray-50 border-b  focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out"
-                                      >
-                                        <div className="px-4 py-4 sm:px-6">
-                                          <div className="flex items-center justify-between">
-                                            <div className="text-sm leading-5 font-medium text-indigo-600 truncate">
-                                              Asset
+                  {data?.distribution &&
+                    Object.keys(data?.distribution).map((keyDis, i) => {
+                      if (keyDis === key)
+                        return (
+                          <div className="sm:col-span-2 mt-2" key={i}>
+                            <dt className="text-sm leading-5 font-medium text-gray-500">
+                              Asset(s)
+                            </dt>
+                            <dd className="mt-1 text-sm leading-5 text-gray-900">
+                              <div className="bg-white shadow overflow-hidden sm:rounded-md mt-2">
+                                {/*{console.log(Object.(data?.distribution[keyDis]).length)}*/}
+                                <ul>
+                                  {Object.values(
+                                    data?.distribution[keyDis]
+                                  ).map((distribute, i) => {
+                                    if (distribute instanceof Object)
+                                      return (
+                                        <li key={i}>
+                                          <a
+                                            href="#"
+                                            className="block hover:bg-gray-50 border-b  focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out"
+                                          >
+                                            <div className="px-4 py-4 sm:px-6">
+                                              <div className="flex items-center justify-between">
+                                                <div className="text-sm leading-5 font-medium text-indigo-600 truncate">
+                                                  Asset
+                                                </div>
+                                                <div className="ml-2 flex-shrink-0 flex">
+                                                  Distribution Condition
+                                                </div>
+                                              </div>
+                                              <div className="mt-2 sm:flex sm:justify-between">
+                                                {distribute.asset}
+                                                <div className="mt-2 flex items-center text-sm leading-5 text-gray-500 sm:mt-0">
+                                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    {
+                                                      distribute.distributioncondition
+                                                    }
+                                                  </span>
+                                                </div>
+                                              </div>
                                             </div>
-                                            <div className="ml-2 flex-shrink-0 flex">
-                                              Distribution Condition
-                                            </div>
-                                          </div>
-                                          <div className="mt-2 sm:flex sm:justify-between">
-                                            {distribute.asset}
-                                            <div className="mt-2 flex items-center text-sm leading-5 text-gray-500 sm:mt-0">
-                                              <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                {
-                                                  distribute.distributioncondition
-                                                }
-                                              </span>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </a>
-                                    </li>
-                                  )
-                                  return undefined}
-                                )}
-                              </ul>
-                            </div>
-                          </dd>
-                        </div>
-                      );
-                    return null;
-                  })}
+                                          </a>
+                                        </li>
+                                      );
+                                    return undefined;
+                                  })}
+                                </ul>
+                              </div>
+                            </dd>
+                          </div>
+                        );
+                      return null;
+                    })}
                 </div>
               </Fragment>
             );
