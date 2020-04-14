@@ -9,8 +9,8 @@ const loading = (props) => {
     <Fragment>
       <div
         style={{
-          height: "100vh",
-          width: "100vw",
+          height: "70vh",
+          width: "70vw",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -310,7 +310,7 @@ const Layout = (props) => {
                     <button
                       className="max-w-xs flex items-center text-sm rounded-full focus:outline-none focus:shadow-outline"
                       id="user-menu"
-                      onClick={() => alert('profile screen')}
+                      onClick={() => alert("profile screen")}
                       aria-label="User menu"
                       aria-haspopup="true"
                     >
@@ -321,7 +321,6 @@ const Layout = (props) => {
                       />
                     </button>
                   </div>
-
                 </div>
               </div>
             </div>
