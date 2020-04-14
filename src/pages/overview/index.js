@@ -119,12 +119,12 @@ const OverviewDashboard = (props) => {
             </div>
             <div className="bg-gray-50 px-4 py-4 sm:px-6">
               <div className="text-sm leading-5">
-                <a
-                  href="#"
+                <Link
+                  to="/"
                   className="font-medium text-indigo-600 hover:text-indigo-500 transition ease-in-out duration-150"
                 >
                   View all
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -177,12 +177,12 @@ const OverviewDashboard = (props) => {
             </div>
             <div className="bg-gray-50 px-4 py-4 sm:px-6">
               <div className="text-sm leading-5">
-                <a
-                  href="#"
+                <Link
+                  to="/"
                   className="font-medium text-indigo-600 hover:text-indigo-500 transition ease-in-out duration-150"
                 >
                   View all
-                </a>
+                </Link>
               </div>
             </div>
           </div>

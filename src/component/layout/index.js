@@ -1,7 +1,7 @@
 import React, { Fragment, useState, Suspense } from "react";
 import routes from "../../routes";
-import { Switch, Route, Link, useLocation, useHistory } from "react-router-dom";
-import { Spinner, Menu, Icon, CornerDialog } from "evergreen-ui";
+import { Switch, Link, useLocation, useHistory } from "react-router-dom";
+import { Spinner, Icon, CornerDialog } from "evergreen-ui";
 import PrivateRoute from "../privateRoute";
 
 const loading = (props) => {
@@ -25,7 +25,7 @@ const loading = (props) => {
 const Layout = (props) => {
   const { pathname } = useLocation();
   const { push } = useHistory();
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
   const [logout, setLogout] = useState(false);
   console.log(pathname);
 
@@ -72,8 +72,8 @@ const Layout = (props) => {
               </div>
               <div className="mt-5 flex-1 h-0 overflow-y-auto">
                 <nav className="px-2">
-                  <a
-                    href="#"
+                  <Link
+                    to="/"
                     className="group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-white bg-gray-900 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150"
                   >
                     <svg
@@ -90,9 +90,9 @@ const Layout = (props) => {
                       />
                     </svg>
                     Overview
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/members"
                     className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
                   >
                     <svg
@@ -109,9 +109,9 @@ const Layout = (props) => {
                       />
                     </svg>
                     Members
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/faqs"
                     className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition ease-in-out duration-150"
                   >
                     <svg
@@ -128,7 +128,7 @@ const Layout = (props) => {
                       />
                     </svg>
                     FAQS
-                  </a>
+                  </Link>
                 </nav>
               </div>
             </div>
@@ -219,7 +219,7 @@ const Layout = (props) => {
               </nav>
             </div>
             <div className="flex-shrink-0 flex bg-gray-700 p-4">
-              <a href="#" className="flex-shrink-0 w-full group block">
+              <span className="flex-shrink-0 w-full group block">
                 <div className="flex items-center">
                   <div>
                     <Icon icon="log-out" color="muted" marginRight={16} />
@@ -233,7 +233,7 @@ const Layout = (props) => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </span>
             </div>
           </div>
         </div>

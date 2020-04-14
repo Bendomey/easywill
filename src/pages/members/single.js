@@ -11,8 +11,7 @@ const SingleUser = (props) => {
       (location.state.member.personalinformation?.othername || "Single User") +
       " | Easy Will";
     setData(location.state.member);
-    console.log(location.state.member);
-  }, []);
+  },[location, push]);
 
   return (
     <Fragment>
@@ -489,7 +488,7 @@ const SingleUser = (props) => {
                       <Fragment key={j}>
                         <div
                           className={`${
-                            j % 2 == 0 ? "bg-gray-50" : "bg-white"
+                            j % 2 === 0 ? "bg-gray-50" : "bg-white"
                           } px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6`}
                         >
                           <dt className="text-sm leading-5 font-medium text-gray-500">
@@ -623,8 +622,7 @@ const SingleUser = (props) => {
                                     if (distribute instanceof Object)
                                       return (
                                         <li key={i}>
-                                          <a
-                                            href="#"
+                                          <span
                                             className="block hover:bg-gray-50 border-b  focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out"
                                           >
                                             <div className="px-4 py-4 sm:px-6">
@@ -647,7 +645,7 @@ const SingleUser = (props) => {
                                                 </div>
                                               </div>
                                             </div>
-                                          </a>
+                                          </span>
                                         </li>
                                       );
                                     return undefined;

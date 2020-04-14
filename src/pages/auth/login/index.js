@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import { toaster, Spinner } from "evergreen-ui";
 
 const LoginComponent = (props) => {
@@ -97,12 +97,12 @@ const LoginComponent = (props) => {
               </div>
 
               <div className="text-sm leading-5">
-                <a
-                  href="#"
+                <Link
+                  to="/login"
                   className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
                 >
                   Forgot your password?
-                </a>
+                </Link>
               </div>
             </div>
 
