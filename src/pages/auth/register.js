@@ -2,14 +2,16 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toaster, Spinner } from "evergreen-ui";
 import axios from "axios";
+import {v4} from 'uuid'
 
-const LoginComponent = (props) => {
+const RegisterComponent = (props) => {
   const { push } = useHistory();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState("");
   useEffect(() => {
-    document.title = "Login | Easy will";
+    document.title = "Register | Easy will";
     let token = localStorage.getItem("easy_token");
     if (token) {
       push("/");
@@ -19,30 +21,33 @@ const LoginComponent = (props) => {
   function handleFormSubmission(e) {
     e.preventDefault();
     setLoading(true);
+
     axios({
       method: "POST",
-      url: `http://localhost:5001/samansiwill/us-central1/login/${email}/${password}`,
+      url: `http://localhost:5001/samansiwill/us-central1/addAdmin/${name}/${email}/${password}/${v4()}`,
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((data) => {
         setLoading(false);
-        if (data.data.ok === true) {
-          localStorage.setItem("easy_token", JSON.stringify(data.data.data));
-          setLoading(false);
-          toaster.success("Hurray", {
-            description: "Logged in successfully",
-          });
-          return push("/");
-        }
-        toaster.success("Errror", {
-          description: data.data.error
+        toaster.success("Hurray", {
+          description: "Account created succesfully, please login to continue",
         });
+        push("/login");
       })
       .catch((e) => {
         setLoading(false);
-        console.log(e);
+        if (e.message === "Network Error") {
+          toaster.success("Hurray", {
+            description:
+              "Account created successfully, please login to continue",
+          });
+          return push("/login");
+        }
+        toaster.warning("Error", {
+          description: "Account created successfully, please login to continue",
+        });
       });
   }
 
@@ -53,11 +58,11 @@ const LoginComponent = (props) => {
           <div>
             <img
               className="mx-auto h-12 w-auto"
-              src={require("../../../assets/logo.svg")}
+              src={require("../../assets/logo.svg")}
               alt="Easy Will logo"
             />
             <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
-              Sign in to your account
+              Register
             </h2>
           </div>
           <form className="mt-8" onSubmit={handleFormSubmission}>
@@ -65,12 +70,23 @@ const LoginComponent = (props) => {
             <div className="rounded-md shadow-sm">
               <div>
                 <input
+                  aria-label="Full Name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                  placeholder="Full Name"
+                />
+              </div>
+              <div>
+                <input
                   aria-label="Email address"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
                   placeholder="Email address"
                 />
               </div>
@@ -84,31 +100,6 @@ const LoginComponent = (props) => {
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
                   placeholder="Password"
                 />
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember_me"
-                  type="checkbox"
-                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                />
-                <label
-                  htmlFor="remember_me"
-                  className="ml-2 block text-sm leading-5 text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm leading-5">
-                <Link
-                  to="/register"
-                  className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-                >
-                  Create An Account
-                </Link>
               </div>
             </div>
 
@@ -130,7 +121,7 @@ const LoginComponent = (props) => {
                     />
                   </svg>
                 </span>
-                {loading ? <Spinner size={30} /> : "Sign in "}
+                {loading ? <Spinner size={30} /> : "Register "}
               </button>
             </div>
           </form>
@@ -140,4 +131,4 @@ const LoginComponent = (props) => {
   );
 };
 
-export default LoginComponent;
+export default RegisterComponent;

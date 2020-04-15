@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Dialog } from "evergreen-ui";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { storage } from "../../component/upload";
+import { v4 } from "uuid";
 
 const FAQS = (props) => {
   useEffect(() => {
@@ -21,6 +23,32 @@ const FAQS = (props) => {
       setFile(file);
     }
   };
+
+  function handleSubmit(close) {
+    let newImageName = v4(file.name);
+    const upload = storage
+      .ref(`faqs/${newImageName}.${file.name.split(".")[1]}`)
+      .put(file);
+    upload.on(
+      "state_changed",
+      (snapshot) => {
+        console.log(snapshot)},
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref(`faqs`)
+          .child(`${newImageName}.${file.name.split(".")[1]}`)
+          .getDownloadURL()
+          .then((data) => {
+            //data that is uploaded
+            console.log(data);
+          });
+      }
+    );
+  }
+
   return (
     <Fragment>
       <div className={"mb-5"}>
@@ -133,14 +161,10 @@ const FAQS = (props) => {
                       Owner
                     </td>
                     <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                      <button
-                        className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline"
-                      >
+                      <button className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">
                         Edit
                       </button>
-                      <button
-                        className="text-red-600 hover:text-red-900 focus:outline-none ml-5 focus:underline"
-                      >
+                      <button className="text-red-600 hover:text-red-900 focus:outline-none ml-5 focus:underline">
                         Delete
                       </button>
                     </td>
@@ -155,9 +179,10 @@ const FAQS = (props) => {
         title={"Add A FAQ"}
         isShown={show}
         onCloseComplete={() => setShow(false)}
+        onConfirm={(close) => handleSubmit(close)}
         confirmLabel={"Add Faq"}
         width={800}
-        minHeightContent={400}
+        minHeightContent={370}
       >
         <Fragment>
           <div>

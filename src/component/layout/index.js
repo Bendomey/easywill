@@ -1,4 +1,4 @@
-import React, { Fragment, useState, Suspense } from "react";
+import React, { Fragment, useState, Suspense,useEffect } from "react";
 import routes from "../../routes";
 import { Switch, Link, useLocation, useHistory } from "react-router-dom";
 import { Spinner, Icon, CornerDialog } from "evergreen-ui";
@@ -28,11 +28,17 @@ const Layout = (props) => {
   // const [showMenu, setShowMenu] = useState(false);
   const [logout, setLogout] = useState(false);
   console.log(pathname);
+  const [user,setUser] = useState(null);
 
   const logoutController = () => {
     localStorage.removeItem("easy_token");
     push("/login");
   };
+
+  useEffect(()=>{
+    let token = localStorage.getItem('easy_token');
+    setUser(JSON.parse(token))
+  })
 
   return (
     <Fragment>
@@ -66,7 +72,7 @@ const Layout = (props) => {
               <div className="flex-shrink-0 flex items-center px-4">
                 <img
                   className="h-8 w-auto"
-                  src="/img/logos/workflow-logo-on-dark.svg"
+                  src={require('../../assets/logo white.svg')}
                   alt="Easy Will Logo"
                 />
               </div>
@@ -140,8 +146,8 @@ const Layout = (props) => {
           <div className="flex flex-col w-64">
             <div className="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
               <img
-                className="h-8 w-auto"
-                src="/img/logos/workflow-logo-on-dark.svg"
+                className="h-15 w-full"
+                src={require('../../assets/logo white.svg')}
                 alt="Workflow"
               />
             </div>
@@ -226,7 +232,7 @@ const Layout = (props) => {
                   </div>
                   <div className="ml-3" onClick={() => setLogout(!logout)}>
                     <p className="text-sm leading-5 font-medium text-white">
-                      Tom Cook
+                      {user?.name || 'N/A'}
                     </p>
                     <p className="text-xs leading-4 font-medium text-gray-300 group-hover:text-gray-200 transition ease-in-out duration-150">
                       Logout
@@ -316,7 +322,7 @@ const Layout = (props) => {
                     >
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={require('../../assets/male.jpeg')}
                         alt=""
                       />
                     </button>

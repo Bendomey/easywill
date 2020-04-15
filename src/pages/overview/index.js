@@ -52,7 +52,7 @@ const OverviewDashboard = (props) => {
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        {loading ? 'loading...' : data || 'N/A'}
+                        {loading ? "loading..." : data || "N/A"}
                       </div>
                     </dd>
                   </dl>
@@ -91,26 +91,11 @@ const OverviewDashboard = (props) => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate">
-                      Avg. Open Rate.
+                      Faqs
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        58.16%
-                      </div>
-                      <div className="ml-2 flex items-baseline text-sm leading-5 font-semibold text-green-600">
-                        <svg
-                          className="self-center flex-shrink-0 h-5 w-5 text-green-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span className="sr-only">Increased by</span>
-                        5.4%
+                        10
                       </div>
                     </dd>
                   </dl>
@@ -149,26 +134,11 @@ const OverviewDashboard = (props) => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate">
-                      Avg. Click Rate
+                      Admins
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        24.57
-                      </div>
-                      <div className="ml-2 flex items-baseline text-sm leading-5 font-semibold text-red-600">
-                        <svg
-                          className="self-center flex-shrink-0 h-5 w-5 text-red-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span className="sr-only">Decreased by</span>
-                        3.2%
+                        2
                       </div>
                     </dd>
                   </dl>

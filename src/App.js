@@ -3,6 +3,7 @@ import Layout from "./component/layout";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Spinner } from "evergreen-ui";
 import LoginComponent from "./pages/auth/login";
+import RegisterComponent from "./pages/auth/register";
 
 const loading = (props) => {
   return (
@@ -34,6 +35,12 @@ function App() {
               render={(props) => <LoginComponent {...props} />}
               path={"/login"}
             />
+              <Route
+                  name={"Register"}
+                  exact={true}
+                  render={(props) => <RegisterComponent {...props} />}
+                  path={"/register"}
+              />
             <Route
               name={"Dasboard"}
               render={(props) => <Layout {...props} />}
