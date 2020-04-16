@@ -35,10 +35,10 @@ const Layout = (props) => {
     push("/login");
   };
 
-  useEffect(()=>{
-    let token = localStorage.getItem('easy_token');
-    setUser(JSON.parse(token))
-  })
+  useEffect(() => {
+    let token = localStorage.getItem("easy_token");
+    setUser(JSON.parse(token));
+  },[]);
 
   return (
     <Fragment>
@@ -146,7 +146,7 @@ const Layout = (props) => {
           <div className="flex flex-col w-64">
             <div className="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
               <img
-                className="h-15 w-full"
+                className="h-13 w-full"
                 src={require('../../assets/logo white.svg')}
                 alt="Workflow"
               />

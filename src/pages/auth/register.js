@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { toaster, Spinner } from "evergreen-ui";
 import axios from "axios";
 import {v4} from 'uuid'
@@ -24,7 +24,8 @@ const RegisterComponent = (props) => {
 
     axios({
       method: "POST",
-      url: `http://localhost:5001/samansiwill/us-central1/addAdmin/${name}/${email}/${password}/${v4()}`,
+      // url: `http://localhost:5001/samansiwill/us-central1/addAdmin/${name}/${email}/${password}/${v4()}`,
+      url: `https://us-central1-samansiwill.cloudfunctions.net/${name}/${email}/${password}/${v4()}`,
       headers: {
         "Content-Type": "application/json",
       },

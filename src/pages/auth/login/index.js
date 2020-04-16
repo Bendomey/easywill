@@ -21,7 +21,8 @@ const LoginComponent = (props) => {
     setLoading(true);
     axios({
       method: "POST",
-      url: `http://localhost:5001/samansiwill/us-central1/login/${email}/${password}`,
+      // url: `http://localhost:5001/samansiwill/us-central1/login/${email}/${password}`,
+      url: `https://us-central1-samansiwill.cloudfunctions.net/login/${email}/${password}`,
       headers: {
         "Content-Type": "application/json",
       },

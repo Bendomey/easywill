@@ -1,19 +1,46 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Dialog } from "evergreen-ui";
+import { Dialog, toaster } from "evergreen-ui";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { storage } from "../../component/upload";
 import { v4 } from "uuid";
+import axios from "axios";
+import moment from "moment";
 
 const FAQS = (props) => {
   useEffect(() => {
     document.title = "Manage FAQs | Easy Will";
   });
   const [show, setShow] = useState(false);
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState("");
   const [picURL, setPicURL] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [faqs, setFaqs] = useState(null);
+  const [loadFaqs, setLoadFaqs] = useState(null);
+
+  const fetchFaqs = () => {
+    setLoadFaqs(true);
+    axios("https://us-central1-samansiwill.cloudfunctions.net/faqs")
+    // axios("http://localhost:5001/samansiwill/us-central1/faqs")
+      .then((res) => res.data)
+      .then((result) => {
+        setLoadFaqs(false);
+        setFaqs(result.data);
+      })
+      .catch((e) => {
+        setLoadFaqs(false);
+        console.log("Error", e);
+      });
+  };
+
+  useEffect(() => {
+    fetchFaqs();
+  }, []);
+
   const handleImageChange = (e) => {
     if (e.target.files[0] !== undefined) {
       setPicURL(URL.createObjectURL(e.target.files[0]));
@@ -25,14 +52,14 @@ const FAQS = (props) => {
   };
 
   function handleSubmit(close) {
-    let newImageName = v4(file.name);
+    setLoading(true);
+    let newImageName = v4();
     const upload = storage
       .ref(`faqs/${newImageName}.${file.name.split(".")[1]}`)
       .put(file);
     upload.on(
       "state_changed",
-      (snapshot) => {
-        console.log(snapshot)},
+      (snapshot) => {},
       (error) => {
         console.log(error);
       },
@@ -43,7 +70,39 @@ const FAQS = (props) => {
           .getDownloadURL()
           .then((data) => {
             //data that is uploaded
-            console.log(data);
+            axios({
+              method: "POST",
+              url: `http://localhost:5001/samansiwill/us-central1/addFaq`,
+              headers: {
+                "Content-Type": "application/json",
+              },
+              data: {
+                title,
+                description,
+                image: data,
+                gen: newImageName,
+              },
+            })
+              .then((data) => {
+                setLoading(false);
+                if (data.data.ok === false) {
+                  setLoading(false);
+                  toaster.warning("Error", {
+                    description: data.data.error,
+                  });
+                  return;
+                }
+                toaster.success("Hurray", {
+                  description: "Faq Added successfully",
+                });
+                close();
+                fetchFaqs();
+              })
+              .catch((e) => {
+                setLoading(false);
+                console.log(e);
+                close();
+              });
           });
       }
     );
@@ -64,9 +123,9 @@ const FAQS = (props) => {
                 viewBox="0 0 20 20"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 />
               </svg>
               Back
@@ -85,9 +144,9 @@ const FAQS = (props) => {
               viewBox="0 0 20 20"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               />
             </svg>
             <Link
@@ -117,69 +176,108 @@ const FAQS = (props) => {
           </div>
         </div>
       </div>
-      <div>
-        <div className="flex flex-col">
-          <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-            <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-              <table className="min-w-full">
-                <thead>
-                  <tr>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Title
-                    </th>
+      {loadFaqs && (
+        <div
+          style={{ height: "50vh" }}
+          className={"flex items-center justify-center"}
+        >
+          Loading ...
+        </div>
+      )}
 
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Description
-                    </th>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Created At
-                    </th>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Created At
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  <tr>
-                    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-4">Why Lawyers</div>
-                      </div>
-                    </td>
+      {!loadFaqs && !faqs && (
+        <div
+          style={{ height: "50vh" }}
+          className={"flex items-center justify-center"}
+        >
+          No data here ...
+        </div>
+      )}
 
-                    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                      Active
-                    </td>
-                    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                      Owner
-                    </td>
-                    <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                      <button className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">
-                        Edit
-                      </button>
-                      <button className="text-red-600 hover:text-red-900 focus:outline-none ml-5 focus:underline">
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+      {!loadFaqs && faqs && Object.values(faqs).length !== 0 && (
+        <div>
+          <div className="flex flex-col">
+            <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+              <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                <table className="min-w-full">
+                  <thead>
+                    <tr>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Title
+                      </th>
+
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Description
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Created At
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Created At
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white">
+                    {Object.entries(faqs).map(([key, member], i) => {
+                      return (
+                        <Fragment key={i}>
+                          <tr>
+                            <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  <img
+                                    className="h-10 w-10 rounded-full"
+                                    src={member.image}
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="ml-4">
+                                  {member.title.split("").length > 20
+                                    ? `${member.title.slice(0, 20)}...`
+                                    : member.title}
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                              {member.description
+                                .replace(/<[^>]+>/g, "")
+                                .split("").length > 20
+                                ? `${member.description
+                                    .replace(/<[^>]+>/g, "")
+                                    .slice(0, 20)}...`
+                                : member.description.replace(/<[^>]+>/g, "")}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                              {moment(member.createdAt).format("Do MMMM YYYY hh:mm a")}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                              <button className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">
+                                Edit
+                              </button>
+                              <button className="text-red-600 hover:text-red-900 focus:outline-none ml-5 focus:underline">
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
       <Dialog
         title={"Add A FAQ"}
         isShown={show}
         onCloseComplete={() => setShow(false)}
         onConfirm={(close) => handleSubmit(close)}
+        isConfirmDisabled={loading}
+        isConfirmLoading={loading}
         confirmLabel={"Add Faq"}
         width={800}
         minHeightContent={370}
@@ -214,6 +312,8 @@ const FAQS = (props) => {
               <div className="mt-1 relative shadow-sm">
                 <input
                   id="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   className="form-input block w-full sm:text-sm sm:leading-5"
                   placeholder="title ..."
                 />

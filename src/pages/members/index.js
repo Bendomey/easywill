@@ -10,8 +10,8 @@ const MemberComponent = (props) => {
     document.title = "Members | Easy Will Dashboard";
     setLoading(true);
     //fetch data
-    // axios("https://us-central1-samansiwill.cloudfunctions.net/members")
-    axios("http://localhost:5001/samansiwill/us-central1/members")
+    axios("https://us-central1-samansiwill.cloudfunctions.net/members")
+    // axios("http://localhost:5001/samansiwill/us-central1/members")
       .then((res) => res.data)
       .then((members) => {
         setLoading(false);
