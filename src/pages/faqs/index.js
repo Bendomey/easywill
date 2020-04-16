@@ -15,8 +15,8 @@ const FAQS = (props) => {
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [file, setFile] = useState("");
-  const [picURL, setPicURL] = useState("");
+  const [file, setFile] = useState(null);
+  const [picURL, setPicURL] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const [faqs, setFaqs] = useState(null);
@@ -52,6 +52,20 @@ const FAQS = (props) => {
   };
 
   function handleSubmit(close) {
+    //validation
+    if(!file) return toaster.warning("Error",{
+      description:"Please add an image"
+    });
+
+    if(title.trim().length === 0) return toaster.warning("Error",{
+      description:"Please add title to the faq"
+    });
+
+    if(description.trim().length === 0) return toaster.warning("Error",{
+      description:"Please add a description to the faq"
+    });
+
+
     setLoading(true);
     let newImageName = v4();
     const upload = storage
