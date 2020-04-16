@@ -25,7 +25,7 @@ const RegisterComponent = (props) => {
     axios({
       method: "POST",
       // url: `http://localhost:5001/samansiwill/us-central1/addAdmin/${name}/${email}/${password}/${v4()}`,
-      url: `https://us-central1-samansiwill.cloudfunctions.net/${name}/${email}/${password}/${v4()}`,
+      url: `https://us-central1-samansiwill.cloudfunctions.net/register/${name}/${email}/${password}/${v4()}`,
       headers: {
         "Content-Type": "application/json",
       },
