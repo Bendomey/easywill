@@ -3,23 +3,42 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const OverviewDashboard = (props) => {
-  const [data, setData] = useState([null]);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [faqs, setFaqs] = useState(null);
+  const [admins, setAdmin] = useState(null);
   useEffect(() => {
     document.title = "Overview | Easy Will Dashboard";
-    setLoading(true);
     //fetch data
     axios("https://us-central1-samansiwill.cloudfunctions.net/members")
     // axios("http://localhost:5001/samansiwill/us-central1/members")
       .then((res) => res.data)
       .then((members) => {
-        setLoading(false);
         setData(Object.values(members.data).length);
       })
       .catch((e) => {
-        setLoading(false);
         console.log("Error", e);
       });
+
+    axios("https://us-central1-samansiwill.cloudfunctions.net/faqs")
+        // axios("http://localhost:5001/samansiwill/us-central1/members")
+        .then((res) => res.data)
+        .then((members) => {
+          setFaqs(Object.values(members.data).length);
+        })
+        .catch((e) => {
+          console.log("Error", e);
+        });
+
+    axios("https://us-central1-samansiwill.cloudfunctions.net/admins")
+        // axios("http://localhost:5001/samansiwill/us-central1/members")
+        .then((res) => res.data)
+        .then((members) => {
+          setAdmin(Object.values(members.data).length);
+        })
+        .catch((e) => {
+          console.log("Error", e);
+        });
+
   }, []);
 
   return (
@@ -52,7 +71,7 @@ const OverviewDashboard = (props) => {
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        {loading ? "loading..." : data || "N/A"}
+                        { data || "N/A"}
                       </div>
                     </dd>
                   </dl>
@@ -95,7 +114,7 @@ const OverviewDashboard = (props) => {
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        10
+                        {faqs || 'N/A'}
                       </div>
                     </dd>
                   </dl>
@@ -105,7 +124,7 @@ const OverviewDashboard = (props) => {
             <div className="bg-gray-50 px-4 py-4 sm:px-6">
               <div className="text-sm leading-5">
                 <Link
-                  to="/"
+                  to="/faqs"
                   className="font-medium text-indigo-600 hover:text-indigo-500 transition ease-in-out duration-150"
                 >
                   View all
@@ -138,7 +157,7 @@ const OverviewDashboard = (props) => {
                     </dt>
                     <dd className="flex items-baseline">
                       <div className="text-2xl leading-8 font-semibold text-gray-900">
-                        2
+                        {admins || 'N/A'}
                       </div>
                     </dd>
                   </dl>
