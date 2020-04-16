@@ -72,7 +72,8 @@ const FAQS = (props) => {
             //data that is uploaded
             axios({
               method: "POST",
-              url: `http://localhost:5001/samansiwill/us-central1/addFaq`,
+              url: `https://us-central1-samansiwill.cloudfunctions.net/addFaq`,
+              // url: `http://localhost:5001/samansiwill/us-central1/addFaq`,
               headers: {
                 "Content-Type": "application/json",
               },
