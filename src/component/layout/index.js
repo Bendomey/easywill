@@ -25,7 +25,6 @@ const loading = (props) => {
 const Layout = (props) => {
   const { pathname } = useLocation();
   const { push } = useHistory();
-  // const [showMenu, setShowMenu] = useState(false);
   const [logout, setLogout] = useState(false);
   console.log(pathname);
   const [user,setUser] = useState(null);
